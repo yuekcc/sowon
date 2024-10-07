@@ -1,0 +1,63 @@
+CC?=				gcc
+CXX?=				g++
+PREFIX?=			/usr/local
+INSTALL?=			install
+
+SDL2_ROOT=			./SDL2/x86_64-w64-mingw32
+COMMON_CFLAGS=		-Wall -Wextra -std=c99 -pedantic
+CFLAGS+=			-I$(SDL2_ROOT)/include $(COMMON_CFLAGS) -Wl,--subsystem=windows -mwindows
+COMMON_LIBS=		-lm
+PNG2C_BIN=			png2c.exe
+SOWON_BIN=			sowon.exe
+LIBS=				-L$(SDL2_ROOT)/lib \
+					$(COMMON_LIBS) \
+					-lmingw32 \
+					-lm \
+					-lkernel32 \
+					-luser32 \
+					-lgdi32 \
+					-lwinmm \
+					-limm32 \
+					-lole32 \
+					-loleaut32 \
+					-lversion \
+					-luuid \
+					-ladvapi32 \
+					-lsetupapi \
+					-lshell32 \
+					-ldinput8 \
+					$(SDL2_ROOT)/lib/libSDL2.a \
+					$(SDL2_ROOT)/lib/libSDL2main.a
+
+
+.PHONY: all
+all: Makefile sowon man
+
+sowon: main.c digits.h penger_walk_sheet.h
+	$(CC) $(CFLAGS) -o $(SOWON_BIN) main.c $(LIBS)
+
+digits.h: png2c digits.png
+	./$(PNG2C_BIN) digits.png digits > digits.h
+
+penger_walk_sheet.h: png2c penger_walk_sheet.png
+	./$(PNG2C_BIN) penger_walk_sheet.png penger > penger_walk_sheet.h
+
+png2c: png2c.c
+	$(CC) $(COMMON_CFLAGS) -o $(PNG2C_BIN) png2c.c -lm
+
+docs/sowon.6.gz: docs/sowon.6
+	gzip -c docs/sowon.6 > docs/sowon.6.gz
+
+.PHONY: man
+man: docs/sowon.6.gz
+
+.PHONY: clean
+clean:
+	rm sowon docs/sowon.6.gz png2c
+
+.PHONY: install
+install: all
+	$(INSTALL) -d $(DESTDIR)$(PREFIX)/bin
+	$(INSTALL) -C ./$(SOWON_BIN) $(DESTDIR)$(PREFIX)/bin
+	$(INSTALL) -d $(DESTDIR)$(PREFIX)/man/man6
+	$(INSTALL) -C docs/sowon.6.gz $(DESTDIR)$(PREFIX)/man/man6

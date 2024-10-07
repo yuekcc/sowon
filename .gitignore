@@ -9,3 +9,4 @@ SDL2
 *.exe
 .dSYM/
 *.gz
+*.pdb
