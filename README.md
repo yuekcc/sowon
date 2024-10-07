@@ -37,6 +37,20 @@ $ make
 > build_msvc
 ```
 
+#### Gcc
+
+- Install [gcc](https://github.com/niXman/mingw-builds-binaries) and [git for windows](https://gitforwindows.org/)
+- Download [SDL2-devel-2.30.8-mingw.tar.gz](https://github.com/libsdl-org/SDL/releases/tag/release-2.30.8) and copy it to `path\to\sowon`
+- Enter git bash
+
+```sh
+cd path/to/sowon
+tar -xf SDL2-devel-2.30.8-mingw.tar.gz
+mv SDL2-2.30.8 SDL2
+rm SDL2-devel-2.30.8-mingw.tar.gz
+CC="gcc" CXX="g++" PREFIX=./dist mingw32-make -f Makefile.mingw32 install
+```
+
 ## Usage
 
 ### Modes
