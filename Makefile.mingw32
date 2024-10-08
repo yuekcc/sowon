@@ -12,6 +12,8 @@ SOWON_BIN=			sowon.exe
 LIBS=				-L$(SDL2_ROOT)/lib \
 					$(COMMON_LIBS) \
 					-lmingw32 \
+					-lSDL2main \
+					$(SDL2_ROOT)/lib/libSDL2.a \
 					-lm \
 					-lkernel32 \
 					-luser32 \
@@ -25,9 +27,8 @@ LIBS=				-L$(SDL2_ROOT)/lib \
 					-ladvapi32 \
 					-lsetupapi \
 					-lshell32 \
-					-ldinput8 \
-					$(SDL2_ROOT)/lib/libSDL2.a \
-					$(SDL2_ROOT)/lib/libSDL2main.a
+					-ldinput8
+
 
 
 .PHONY: all
@@ -53,7 +54,7 @@ man: docs/sowon.6.gz
 
 .PHONY: clean
 clean:
-	rm sowon docs/sowon.6.gz png2c
+	rm $(SOWON_BIN) $(PNG2C_BIN) docs/sowon.6.gz
 
 .PHONY: install
 install: all
