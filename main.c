@@ -256,11 +256,19 @@ int main(int argc, char **argv)
 
     secc(SDL_Init(SDL_INIT_VIDEO));
 
+    SDL_DisplayMode dm;
+    secc(SDL_GetCurrentDisplayMode(0, &dm));
+
+    int win_w = TEXT_WIDTH;
+    int win_h = TEXT_HEIGHT*2;
+    int win_x = (dm.w - win_w) / 2;
+    int win_y = (dm.h - win_h) / 2;
+
     SDL_Window *window =
         secp(SDL_CreateWindow(
                  "sowon",
-                 0, 0,
-                 TEXT_WIDTH, TEXT_HEIGHT*2,
+                 win_x, win_y,
+                 win_w, win_h,
                  SDL_WINDOW_RESIZABLE));
 
     SDL_Renderer *renderer =
